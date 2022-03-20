@@ -248,9 +248,9 @@ dependencies = [
 
 [[package]]
 name = "autocfg"
-version = "1.1.0"
+version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
+checksum = "cdb031dd78e28731d87d56cc8ffef4a8f36ca26c38fe2de700543e627f8a464a"
 
 [[package]]
 name = "base64"
@@ -356,6 +356,15 @@ dependencies = [
  "num-traits 0.2.14",
  "time 0.1.43",
  "winapi",
+]
+
+[[package]]
+name = "claim"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f81099d6bb72e1df6d50bb2347224b666a670912bb7f06dbe867a4a070ab3ce8"
+dependencies = [
+ "autocfg",
 ]
 
 [[package]]
@@ -1561,6 +1570,7 @@ version = "0.1.0"
 dependencies = [
  "actix-web",
  "chrono",
+ "claim",
  "config",
  "log",
  "once_cell",
@@ -1574,7 +1584,9 @@ dependencies = [
  "tracing-bunyan-formatter",
  "tracing-log",
  "tracing-subscriber",
+ "unicode-segmentation",
  "uuid",
+ "validator",
 ]
 
 [[package]]
@@ -2226,6 +2238,32 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bc5cf98d8186244414c848017f0e2676b3fcb46807f6668a97dfe67359a3c4b7"
 dependencies = [
  "getrandom",
+]
+
+[[package]]
+name = "validator"
+version = "0.14.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6d0f08911ab0fee2c5009580f04615fa868898ee57de10692a45da0c3bcc3e5e"
+dependencies = [
+ "idna",
+ "lazy_static",
+ "regex",
+ "serde 1.0.136",
+ "serde_derive",
+ "serde_json",
+ "url",
+ "validator_types",
+]
+
+[[package]]
+name = "validator_types"
+version = "0.14.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ded9d97e1d42327632f5f3bae6403c04886e2de3036261ef42deebd931a6a291"
+dependencies = [
+ "proc-macro2",
+ "syn",
 ]
 
 [[package]]
