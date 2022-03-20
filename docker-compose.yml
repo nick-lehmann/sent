@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: sent
+      POSTGRES_USER: sent
+      POSTGRES_PASSWORD: sent
+    ports:
+      - "5434:5432"
