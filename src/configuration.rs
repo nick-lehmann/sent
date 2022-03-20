@@ -1,10 +1,50 @@
 use secrecy::{ExposeSecret, Secret};
 
+pub enum Environment {
+    Production,
+    Local,
+}
+
+impl Environment {
+    pub fn as_str(&self) -> String {
+        match self {
+            Environment::Production => "production",
+            Environment::Local => "local",
+        }
+        .to_string()
+    }
+}
+
+impl TryFrom<String> for Environment {
+    type Error = String;
+
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        match value.as_str() {
+            "production" => Ok(Environment::Production),
+            "local" => Ok(Environment::Local),
+            _ => Err(format!("Unable to convert {} into an environment", value)),
+        }
+    }
+}
+
 #[derive(serde::Deserialize)]
 pub struct Settings {
+    pub application: ApplicationSettings,
     pub database: DatabaseSettings,
-    pub application_port: u16,
 }
+
+#[derive(serde::Deserialize)]
+pub struct ApplicationSettings {
+    pub host: String,
+    pub port: u16,
+}
+
+impl ApplicationSettings {
+    pub fn address(&self) -> String {
+        format!("{}:{}", self.host, self.port)
+    }
+}
+
 #[derive(serde::Deserialize)]
 pub struct DatabaseSettings {
     pub username: String,
@@ -39,7 +79,21 @@ impl DatabaseSettings {
 
 pub fn get_configuration() -> Result<Settings, config::ConfigError> {
     let mut config = config::Config::default();
-    config.merge(config::File::with_name("configuration"))?;
+
+    let base_path = std::env::current_dir().expect("Failed to determine the current directory");
+    let configuration_directory = base_path.join("configuration");
+
+    config.merge(config::File::from(configuration_directory.join("base")))?;
+
+    let environment: Environment = std::env::var("APP_ENVIRONMENT")
+        .unwrap_or_else(|_| "local".into())
+        .try_into()
+        .expect("Failed to parse APP_ENVIRONMENT.");
+
+    config.merge(
+        config::File::from(configuration_directory.join(environment.as_str())).required(true),
+    )?;
+
     let settings: Settings = config.try_into().unwrap();
     Ok(settings)
 }
