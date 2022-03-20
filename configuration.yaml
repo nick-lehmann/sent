@@ -1,0 +1,8 @@
+# configuration.yaml
+application_port: 8000 
+database:
+  host: "127.0.0.1"
+  port: 5434
+  username: "sent" 
+  password: "sent" 
+  database_name: "sent"
