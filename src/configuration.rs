@@ -28,7 +28,7 @@ impl TryFrom<String> for Environment {
 }
 
 #[derive(serde::Deserialize)]
-pub struct Settings {
+pub struct Configuration {
     pub application: ApplicationSettings,
     pub database: DatabaseSettings,
 }
@@ -77,7 +77,7 @@ impl DatabaseSettings {
     }
 }
 
-pub fn get_configuration() -> Result<Settings, config::ConfigError> {
+pub fn get_configuration() -> Result<Configuration, config::ConfigError> {
     let mut config = config::Config::default();
 
     let base_path = std::env::current_dir().expect("Failed to determine the current directory");
@@ -94,6 +94,6 @@ pub fn get_configuration() -> Result<Settings, config::ConfigError> {
         config::File::from(configuration_directory.join(environment.as_str())).required(true),
     )?;
 
-    let settings: Settings = config.try_into().unwrap();
+    let settings: Configuration = config.try_into().unwrap();
     Ok(settings)
 }
